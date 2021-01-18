@@ -166,7 +166,7 @@ def extract_new_content(new_data):
 
 
 # get just new content from scraped data and save it on top of CSV file
-def save_new_data(new_data):
+def save_new_data(new_data: pd.DataFrame):
     timestamp = strftime("%H:%M %d-%m-%Y", localtime())
     timestamp_row = pd.DataFrame(
         {'Url': [''], 'Nazwa': [''], 'Telefon': [''], 'Cena': [0], 'Zdjecie': [''], 'Powierzchnia': 0.0, 'Piętro': [''],
@@ -178,9 +178,9 @@ def save_new_data(new_data):
 
 
 # Merge data delivered in form of list of lists of dictionaries [[], [], [{},{},{}], [{},{},{}], ...]
-def merge_results(list_of_dicts):
+def merge_results(ads: list):
     whole_data = defaultdict(list)
-    for r in list(filter(lambda x: len(x) > 0, list_of_dicts)):
+    for r in list(filter(lambda x: len(x) > 0, ads)):
         for dic in r:
             if type(dic) == dict:
                 for key, value in dic.items():
@@ -189,7 +189,7 @@ def merge_results(list_of_dicts):
     return df
 
 
-def export_to_excel(path: Path, data):
+def export_to_excel(path: Path, data: pd.DataFrame):
     path = path.joinpath('output.xlsx')
     os.system("TASKKILL /F /IM excel.exe")
     writer = pd.ExcelWriter(str(path), engine="xlsxwriter", date_format='dd.mmm.yyyy')
@@ -205,37 +205,12 @@ def export_to_excel(path: Path, data):
     worksheet.set_column('D:D', 12, format1)  # telefon
     worksheet.set_column('E:E', 50)  # link
     worksheet.set_column('F:F', 50)  # link google
-
     writer.save()
-    # os.startfile(fileName)
-
-
-# def export_to_csv(path: Path, data):
-#     path = path.joinpath('output.csv')
-#     data.to_csv(path, sep=",", header=True, index=False)
-#
-#
-# def read_from_csv(path: Path):
-#     path = path.joinpath('output.csv')
-#     try:
-#         df = pd.read_csv(path)
-#         return df
-#     except Exception as e:
-#         logging.info(e)
-#         return pd.DataFrame(
-#             {'Url': [], 'Nazwa': [], 'Telefon': [], 'Cena': [], 'Zdjecie': [], 'Powierzchnia': float, 'Piętro': [],
-#              'Tresc': [], 'Zrodlo': []})
-#
-#
-# def export_to_json(path: Path, data):
-#     path = path.joinpath('output.json')
-#     data.to_json(path, orient='records')
 
 
 def get_new_lines(df1, df2):
     df3 = pd.concat([df1, df2, df2], ignore_index=True, sort=False).drop_duplicates(subset=['Url'], keep=False)
     df4 = pd.concat([df3, df2, df2], ignore_index=True, sort=False).drop_duplicates(subset=['Nazwa'], keep=False)
-
     logging.info(f'{len(df4)} new lines')
     return df4
 
@@ -244,7 +219,6 @@ def render_html():
     data = pd.read_pickle(DATABASE_FILE)
     data = data.dropna(axis=0, how='all', thresh=None, subset=None, inplace=False)
     data = data.fillna("")
-
     # calc square meter unit prices
     m2_price = []
     for i, r in data.iterrows():
@@ -260,7 +234,7 @@ def render_html():
     data['CenaMetr'] = m2_price
 
     # limit to 270 chars
-    data.Tresc = data.Tresc.str[:270]
+    data['Tresc'] = data['Tresc'].str[:270]
 
     # if str consist 'ynaj' its probably rent ad
     data = data[~data.Nazwa.str.contains('ynaj')]
