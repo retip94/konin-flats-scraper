@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+.*
+*.log
+/myvenv/
+output/output.csv
+__pycache__/
+config_local.py
