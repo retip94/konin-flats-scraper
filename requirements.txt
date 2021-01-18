@@ -1,0 +1,5 @@
+requests~=2.22.0
+pandas~=0.25.1
+Jinja2~=2.11.2
+bs4~=0.0.1
+beautifulsoup4~=4.8.0

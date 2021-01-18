@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mieszkania</title>
+    <link rel="stylesheet" href="bootstrap.css">
+    <link rel="stylesheet" href="style.css?dev={{version}}">
+</head>
+<body>
+<div id="modal">
+    <div class="modal-content rounded-10">
+        <span class="close cursor" onclick="closeModal()">&times;</span>
+        <div id="current-slide">
+        </div>
+        <!-- Next/previous controls -->
+        <div class="prev-area" onclick="plusSlides(-1)">
+            <a class="prev">&#10094;</a>
+        </div>
+        <div class="next-area" onclick="plusSlides(1)">
+            <a class="next">&#10095;</a>
+        </div>
+        <!-- Thumbnail image controls -->
+        <div id="thumbnails">
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt-5">
+    {% for row in data %}
+    {% if row['Tresc'] == "---" %}
+    <div class="timestamp row" style="background-color:rgba(255,68,68,0.5);">
+        <div class="font-weight-bold mx-lg-5 mx-2 col-12 text-center text-xl-left">
+            <h7>{{row['Zrodlo']}}</h7>
+        </div>
+    </div>
+    {% else %}
+    <div class="offer row mx-lg-5 m-2 p-2">
+        <figure class="col-xl-3 image cursor" onclick="openModal('{{ loop.index }}');"
+                style="background: url('{{row.Zdjecie}}') center;background-size: cover;" loading="lazy"></figure>
+        <div class="col-xl-9 info-container">
+            <div class="name-container text-center text-xl-left"><a href="{{row['Url']}}"
+                                                                    class="name font-weight-bold text-dark"
+                                                                    target="_blank">{{row['Nazwa']}}
+                [{{row['Zrodlo']}}]</a></div>
+            <div class="row my-3">
+                <div class="col-3 text-center">
+                    <div class="price font-weight-bold text-danger"><h3 class="mb-0"><span class="text-nowrap">{{row['Cena']}}</span>
+                        zł</h3></div>
+                    <div class="unit-price text-secondary mb-md-1 mb-3 text-nowrap">
+                        {% if row['CenaMetr'] %}
+                        ( {{row['CenaMetr']}} zł/m² )
+                        {% endif %}
+                        &nbsp;
+                    </div>
+                    <div class="level text-secondary mb-md-0 mb-3">{{row['Piętro']}}</div>
+                    <div class="area text-secondary text-nowrap">{{row['Powierzchnia']}} m²</div>
+                </div>
+                <div class="col-9">
+                    <div class="text-container text-justify">{{row['Tresc']}}</div>
+                    <a href="fb-messenger://share?link={{row.Url}}">Udostępnij</a>
+                </div>
+            </div>
+        </div>
+        <div id="modal-{{ loop.index }}" class="d-none modal-photos-string">{{row.Galeria}}</div>
+    </div>
+    {% endif %}
+    {% endfor %}
+</div>
+
+<script src="lightbox.js?dev={{version}}"></script>
+</body>
+</html>

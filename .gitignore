@@ -5,3 +5,5 @@
 output/output.csv
 __pycache__/
 config_local.py
+db
+/outputHtml
