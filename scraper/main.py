@@ -53,7 +53,6 @@ def main():
         if len(data):
             save_new_data(data)
         render_html()
-        export_html_by_ftp()
     except Exception as e:
         print(e)
         logging.error(e)
@@ -248,6 +247,7 @@ def render_html():
         fp.write(rendered)
 
 
+# used when script was running on local machine and results were sent to the server
 def export_html_by_ftp():
     try:
         logging.info('Connecting FTP...')

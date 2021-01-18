@@ -8,7 +8,7 @@ HEADERS = {'User-Agent': USER_AGENT,
            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8'}
 ROOT_PATH = Path(__file__).parent.parent
 OUTPUT_PATH = ROOT_PATH.joinpath('output')
-OUTPUT_INDEX_PATH = ROOT_PATH.joinpath('outputHtml', 'index.html')
+OUTPUT_INDEX_PATH = ROOT_PATH.joinpath('public', 'index.html')
 DATABASE_FILE = OUTPUT_PATH.joinpath('db')
 INDEX_TEMPLATE_PATH = ROOT_PATH.joinpath('scraper')
 LOG_FILE_PATH = ROOT_PATH.joinpath('log.log')
